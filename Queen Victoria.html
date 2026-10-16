@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SFS queen Victoria</title>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Queen Victoria</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: white;
+    color: #6f6a73;
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.7;
+}
+
+/* HIGHLIGHTER BAR */
+
+.highlight-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-bottom: 2px solid #d19a22;
+}
+
+.highlight-toolbar button {
+    border: 2px solid #d19a22;
+    background: white;
+    color: #80631d;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.highlight-toolbar button:hover {
+    background: #fff5c7;
+}
+
+.highlight-toolbar button.active {
+    background: #ffe36e;
+}
+
+mark.user-highlight {
+    background: #ffe36e;
+    color: inherit;
+    padding: 1px 3px;
+    border-radius: 3px;
+}
+
+body.highlight-mode {
+    cursor: text;
+}
+
+/* MAIN PAGE */
+
+.page {
+    max-width: 1100px;
+    margin: auto;
+    padding: 35px 55px 70px;
+}
+
+.source {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+.logo {
+    color: #e00000;
+    font-family: Arial, sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.title {
+    text-align: center;
+    color: #967329;
+    font-size: clamp(55px, 8vw, 105px);
+    line-height: 1;
+    margin: 20px 0 15px;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 28px;
+    font-style: italic;
+    color: #a59ba7;
+    max-width: 700px;
+    margin: auto;
+}
+
+.dates {
+    display: block;
+    width: fit-content;
+    margin: 45px auto;
+    padding: 10px 28px;
+    border: 3px solid #d39b21;
+    border-radius: 40px;
+    color: #967329;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.gold-line {
+    height: 4px;
+    background: #c79222;
+    border: none;
+    margin: 40px 0;
+}
+
+/* FACT BOX */
+
+.facts {
+    border: 2px solid #d9a52e;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 50px;
+    overflow: hidden;
+}
+
+.fact {
+    padding: 25px;
+    border-right: 1px solid #80687f;
+}
+
+.fact:last-child {
+    border-right: none;
+}
+
+.fact-title {
+    font-style: italic;
+    font-size: 18px;
+    color: #8b7c8c;
+}
+
+.fact-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #88808a;
+}
+
+/* INTRO */
+
+.intro {
+    font-size: 25px;
+    line-height: 1.65;
+    margin-bottom: 60px;
+}
+
+.drop-cap {
+    float: left;
+    font-size: 80px;
+    line-height: 65px;
+    padding-right: 8px;
+    color: #a6812d;
+}
+
+/* SECTIONS */
+
+section {
+    margin: 70px 0;
+}
+
+h2 {
+    color: #967329;
+    font-size: 42px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #d5a02a;
+    padding-bottom: 10px;
+}
+
+p {
+    font-size: 21px;
+    margin: 20px 0;
+}
+
+.wow {
+    text-decoration: underline dotted #d19a22 3px;
+    text-decoration-skip-ink: none;
+    font-weight: bold;
+}
+
+/* TIMELINE */
+
+.timeline {
+    border-left: 5px solid #d19a22;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    margin: 25px 0;
+    font-size: 21px;
+}
+
+.year {
+    color: #967329;
+    font-weight: bold;
+    font-size: 25px;
+    display: inline-block;
+    width: 90px;
+}
+
+/* WOW WORDS */
+
+.wow-box {
+    background: #faf7ef;
+    border: 3px solid #d19a22;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 60px;
+}
+
+.wow-box h2 {
+    border: none;
+    margin-top: 0;
+}
+
+.word {
+    margin: 18px 0;
+}
+
+.word strong {
+    color: #967329;
+    font-size: 23px;
+}
+
+.word span {
+    display: block;
+    font-size: 19px;
+}
+
+footer {
+    text-align: center;
+    color: #999;
+    margin-top: 70px;
+    padding-top: 30px;
+    border-top: 2px solid #ddd;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .page {
+        padding: 25px 20px;
+    }
+
+    .title {
+        font-size: 55px;
+    }
+
+    .subtitle {
+        font-size: 21px;
+    }
+
+    .facts {
+        grid-template-columns: 1fr;
+    }
+
+    .fact {
+        border-right: none;
+        border-bottom: 1px solid #80687f;
+    }
+
+    .fact:last-child {
+        border-bottom: none;
+    }
+
+    h2 {
+        font-size: 32px;
+    }
+
+    p,
+    .intro {
+        font-size: 18px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HIGHLIGHTER BUTTONS -->
+
+<div class="highlight-toolbar">
+
+    <button id="highlightToggle">
+        🖍️ Highlighter: OFF
+    </button>
+
+    <button id="clearHighlights">
+        🗑️ Clear Highlights
+    </button>
+
+</div>
+
+
+<div class="page">
+
+    <div class="source">
+        A HISTORY RESOURCE FROM
+    </div>
+    </div>
+
+    <h1 class="title">
+        Queen Victoria
+    </h1>
+
+    <div class="subtitle">
+        The lonely girl who became the ruler of an empire
+    </div>
+
+    <div class="dates">
+        1819 to 1901
+    </div>
+
+    <hr class="gold-line">
+
+
+    <!-- FACTS -->
+
+    <div class="facts">
+
+        <div class="fact">
+
+            <div class="fact-title">
+                Born
+            </div>
+
+            <div class="fact-value">
+                24 May 1819,<br>
+                Kensington Palace,<br>
+                London
+            </div>
+
+        </div>
+
+
+        <div class="fact">
+
+            <div class="fact-title">
+                Reigned for
+            </div>
+
+            <div class="fact-value">
+                63 years and 7 months
+            </div>
+
+        </div>
+
+
+        <div class="fact">
+
+            <div class="fact-title">
+                Husband
+            </div>
+
+            <div class="fact-value">
+                Prince Albert
+            </div>
+
+            <br>
+
+            <div class="fact-title">
+                Children
+            </div>
+
+            <div class="fact-value">
+                Nine
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INTRO -->
+
+    <div class="intro">
+
+        <span class="drop-cap">I</span>
+
+        magine waking up one morning as an ordinary eighteen-year-old
+        and being told that you are now the queen of the whole country.
+        That is exactly what happened to Queen Victoria.
+
+        She went on to <span class="wow">reign</span> for more than
+        sixty-three years, which was longer than any British
+        <span class="wow">monarch</span> before her.
+
+        Her time on the throne was so <span class="wow">remarkable</span>
+        that we still call it the Victorian era today.
+
+        In this page, I am going to tell you all about her extraordinary
+        life, from her lonely childhood to her magnificent funeral.
+
+    </div>
+
+
+    <!-- LONELY CHILDHOOD -->
+
+    <section>
+
+        <h2>
+            A Lonely Childhood
+        </h2>
+
+        <p>
+            Victoria was born on 24 May 1819 at Kensington Palace in London.
+            Her full name was Alexandrina Victoria. She was named Alexandrina
+            after her godfather, the Tsar of Russia, and Victoria after her mother.
+        </p>
+
+        <p>
+            Her father, Prince Edward, the Duke of Kent, died when she was
+            only eight months old, so she was brought up by her mother,
+            who came from Germany. Victoria grew up speaking German as well
+            as English.
+        </p>
+
+        <p>
+            You might think that growing up as a princess would be glamorous,
+            but Victoria's childhood was strict and rather lonely.
+            Her mother and a man called Sir John Conroy invented a set of
+            rules known as the Kensington System.
+        </p>
+
+        <p>
+            Under these rules, Victoria hardly ever met other children.
+            She had to sleep in her mother's bedroom every night, and she
+            was not even allowed to walk down the stairs without holding
+            someone's hand.
+        </p>
+
+        <p>
+            Her main companions were her kind governess, Baroness Lehzen,
+            her pet spaniel, Dash, and her collection of more than 130
+            wooden dolls, which she dressed in tiny costumes.
+        </p>
+
+    </section>
+
+
+    <!-- BECOMING QUEEN -->
+
+    <section>
+
+        <h2>
+            Becoming Queen
+        </h2>
+
+        <p>
+            At about six o'clock in the morning on 20 June 1837,
+            Victoria was woken up and told that her uncle,
+            King William IV, had died.
+        </p>
+
+        <p>
+            The Archbishop of Canterbury and the Lord Chamberlain
+            had rushed to Kensington Palace to give her the news.
+            At just eighteen years old, she was now the queen.
+        </p>
+
+        <p>
+            Legend says that she came downstairs in her dressing gown
+            with her hair hanging loose.
+        </p>
+
+        <p>
+            Victoria was <span class="wow">determined</span> to show
+            that she was ready.
+        </p>
+
+        <p>
+            Her very first decision was to be called Victoria instead
+            of Alexandrina.
+        </p>
+
+        <p>
+            She also asked for an hour on her own, and soon afterwards
+            she moved her bed out of her mother's room.
+            It was her first taste of independence.
+        </p>
+
+        <p>
+            A few weeks later, she became the first monarch to live
+            at Buckingham Palace.
+        </p>
+
+        <p>
+            Her coronation took place at Westminster Abbey on
+            28 June 1838, when she was nineteen.
+            Crowds packed the streets of London to see her,
+            and it was a <span class="wow">glorious</span> day.
+        </p>
+
+        <p>
+            At first, Victoria relied on the prime minister,
+            Lord Melbourne, who taught her how the government worked.
+        </p>
+
+    </section>
+
+
+    <!-- LOVE AND FAMILY -->
+
+    <section>
+
+        <h2>
+            Love and Family
+        </h2>
+
+        <p>
+            In 1839, Victoria's cousin, Prince Albert of
+            Saxe-Coburg and Gotha, came to visit.
+            She liked him immediately.
+        </p>
+
+        <p>
+            Because Victoria was queen, nobody was allowed to propose
+            to her, so she had to ask him herself. Luckily, he said yes!
+        </p>
+
+        <p>
+            They got married on 10 February 1840.
+            Victoria wore a white satin dress decorated with orange blossom.
+        </p>
+
+        <p>
+            Before then, brides wore all sorts of colours, but after
+            Victoria's wedding, white became the fashionable choice,
+            and lots of brides still choose it today.
+        </p>
+
+        <p>
+            Victoria and Albert were <span class="wow">devoted</span>
+            to each other, and they had nine children.
+        </p>
+
+        <p>
+            Albert was clever, hardworking and full of ideas about science,
+            art and education. He also helped to make Christmas trees
+            popular in Britain.
+        </p>
+
+    </section>
+
+
+    <!-- GREAT EXHIBITION -->
+
+    <section>
+
+        <h2>
+            The Great Exhibition
+        </h2>
+
+        <p>
+            Prince Albert's most famous project was the Great Exhibition
+            of 1851.
+        </p>
+
+        <p>
+            It was held in Hyde Park inside a gigantic building made of
+            glass and iron, which people nicknamed the Crystal Palace.
+        </p>
+
+        <p>
+            Inside, there were thousands of inventions and treasures from
+            around the world, including machines, jewels and
+            <span class="wow">enormous</span> steam engines.
+        </p>
+
+        <p>
+            More than six million people visited over five months,
+            and Victoria enjoyed it so much that she went back again and again.
+        </p>
+
+    </section>
+
+
+    <!-- TIME OF GREAT CHANGE -->
+
+    <section>
+
+        <h2>
+            A Time of Great Change
+        </h2>
+
+        <p>
+            Britain changed enormously while Victoria was queen.
+            Railways spread across the country, so people could travel
+            faster than ever before.
+        </p>
+
+        <p>
+            In 1840, the Penny Post began, and the Penny Black,
+            the world's first sticky postage stamp, had a picture
+            of Victoria's head on it.
+        </p>
+
+        <p>
+            The electric telegraph let messages be sent in minutes
+            instead of days.
+        </p>
+
+        <p>
+            Factories grew, and towns and cities became crowded.
+        </p>
+
+        <p>
+            In 1858, the River Thames smelled so terrible that people
+            called it the Great Stink.
+        </p>
+
+        <p>
+            The engineer Joseph Bazalgette solved the problem by building
+            a huge network of sewers, which made London much healthier.
+            Many of those sewers are still used today.
+        </p>
+
+        <p>
+            However, not everything was wonderful.
+            Many poor families lived in dirty, crowded houses,
+            and thousands of children worked long hours in factories,
+            mines and chimneys.
+        </p>
+
+        <p>
+            Slowly, new laws were passed to protect them.
+            In 1870, the Education Act was passed to make sure there
+            were schools for children across England and Wales.
+        </p>
+
+    </section>
+
+
+    <!-- SADNESS AND MOURNING -->
+
+    <section>
+
+        <h2>
+            Sadness and Mourning
+        </h2>
+
+        <p>
+            In December 1861, tragedy struck.
+            Prince Albert became seriously ill and died on 14 December
+            at the age of only forty-two.
+        </p>
+
+        <p>
+            Victoria was <span class="wow">heartbroken</span>.
+            She wore black for the rest of her life, which was about
+            forty years, and she hardly appeared in public for a long time.
+        </p>
+
+        <p>
+            This period of <span class="wow">mourning</span> was so long
+            that people began to call her the Widow of Windsor.
+        </p>
+
+        <p>
+            Gradually, Victoria returned to her duties.
+            She loved spending time at Balmoral Castle in Scotland
+            and Osborne House on the Isle of Wight.
+        </p>
+
+        <p>
+            She became close friends with her Scottish servant,
+            John Brown, who cheered her up.
+        </p>
+
+        <p>
+            Later, she worked with two important prime ministers,
+            Benjamin Disraeli and William Gladstone,
+            although she liked one of them far more than the other.
+        </p>
+
+    </section>
+
+
+    <!-- EMPRESS OF INDIA -->
+
+    <section>
+
+        <h2>
+            Empress of India
+        </h2>
+
+        <p>
+            During Victoria's reign, the British Empire grew to be
+            the largest in history.
+        </p>
+
+        <p>
+            At its height, it covered about a quarter of the land on Earth
+            and included countries such as India, Canada, Australia and
+            parts of Africa.
+        </p>
+
+        <p>
+            In 1876, Victoria was given the extra title of
+            Empress of India.
+        </p>
+
+        <p>
+            It is important to remember that many people in the empire
+            did not choose to be ruled by Britain, and some of them
+            suffered greatly.
+        </p>
+
+        <p>
+            Historians still discuss whether the empire was fair.
+        </p>
+
+    </section>
+
+
+    <!-- GRANDMOTHER OF EUROPE -->
+
+    <section>
+
+        <h2>
+            Grandmother of Europe
+        </h2>
+
+        <p>
+            Victoria's children and grandchildren married into royal
+            families all over Europe, which earned her the nickname
+            the Grandmother of Europe.
+        </p>
+
+        <p>
+            Her grandchildren included Kaiser Wilhelm II of Germany,
+            Tsarina Alexandra of Russia and King George V of Britain.
+        </p>
+
+        <p>
+            Being a queen could also be dangerous.
+            At least seven different people tried to attack her during
+            her life, but she survived every single time.
+        </p>
+
+    </section>
+
+
+    <!-- TWO BIG CELEBRATIONS -->
+
+    <section>
+
+        <h2>
+            Two Big Celebrations
+        </h2>
+
+        <p>
+            In 1887, Britain celebrated her Golden Jubilee to mark
+            fifty years on the throne, with parties and processions
+            across the country.
+        </p>
+
+        <p>
+            Ten years later, in 1897, came the Diamond Jubilee for
+            sixty years, and it was even bigger.
+        </p>
+
+        <p>
+            Soldiers from all over the empire marched through London.
+        </p>
+
+        <p>
+            By then, Victoria was old and found walking difficult,
+            so she stayed in her carriage while a special service was
+            held outside St Paul's Cathedral.
+        </p>
+
+    </section>
+
+
+    <!-- END OF AN ERA -->
+
+    <section>
+
+        <h2>
+            The End of an Era
+        </h2>
+
+        <p>
+            Queen Victoria died on 22 January 1901 at Osborne House,
+            aged eighty-one.
+        </p>
+
+        <p>
+            She had reigned for 63 years and 7 months.
+            Her son then became King Edward VII.
+        </p>
+
+    </section>
+
+
+    <!-- WHY SHE STILL MATTERS -->
+
+    <section>
+
+        <h2>
+            Why She Still Matters
+        </h2>
+
+        <p>
+            Queen Victoria left behind a great deal.
+            The Victoria Cross, the highest medal for bravery in the
+            British armed forces, was created in 1856 and is still
+            awarded today.
+        </p>
+
+        <p>
+            Places all over the world are named after her,
+            such as Victoria Falls in Africa, the state of Victoria
+            in Australia and the city of Victoria in Canada.
+        </p>
+
+        <p>
+            She also wrote in her journal almost every day from the age
+            of thirteen, so we know an incredible amount about her
+            thoughts and feelings.
+        </p>
+
+        <p>
+            In my opinion, Queen Victoria was a remarkable person.
+            She began as a lonely girl who was kept away from the world,
+            yet she became one of the most powerful and famous women
+            in history.
+        </p>
+
+    </section>
+
+
+    <!-- TIMELINE -->
+
+    <section>
+
+        <h2>
+            Victoria's Life in Order
+        </h2>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <span class="year">1819</span>
+                Victoria is born at Kensington Palace.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1837</span>
+                She becomes queen at the age of eighteen.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1838</span>
+                Her coronation takes place at Westminster Abbey.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1840</span>
+                She marries Prince Albert, and the Penny Black stamp is launched.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1851</span>
+                The Great Exhibition opens in the Crystal Palace.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1861</span>
+                Prince Albert dies, and Victoria begins her mourning.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1876</span>
+                She is given the title Empress of India.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1887</span>
+                The Golden Jubilee is celebrated.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1897</span>
+                The Diamond Jubilee is celebrated.
+            </div>
+
+            <div class="timeline-item">
+                <span class="year">1901</span>
+                Victoria dies at Osborne House.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- WOW WORDS -->
+
+    <div class="wow-box">
+
+        <h2>
+            Wow Words
+        </h2>
+
+        <div class="word">
+            <strong>reign</strong>
+            <span>To rule as a king or queen.</span>
+        </div>
+
+        <div class="word">
+            <strong>monarch</strong>
+            <span>A king or queen.</span>
+        </div>
+
+        <div class="word">
+            <strong>remarkable</strong>
+            <span>So special that people notice it.</span>
+        </div>
+
+        <div class="word">
+            <strong>magnificent</strong>
+            <span>Very grand and impressive.</span>
+        </div>
+
+        <div class="word">
+            <strong>determined</strong>
+            <span>Having made up your mind not to give up.</span>
+        </div>
+
+        <div class="word">
+            <strong>coronation</strong>
+            <span>The ceremony where a king or queen is crowned.</span>
+        </div>
+
+        <div class="word">
+            <strong>glorious</strong>
+            <span>Wonderful and full of splendour.</span>
+        </div>
+
+        <div class="word">
+            <strong>devoted</strong>
+            <span>Loving someone very much and staying loyal to them.</span>
+        </div>
+
+        <div class="word">
+            <strong>enormous</strong>
+            <span>Extremely big.</span>
+        </div>
+
+        <div class="word">
+            <strong>heartbroken</strong>
+            <span>Feeling terribly sad.</span>
+        </div>
+
+        <div class="word">
+            <strong>mourning</strong>
+            <span>Showing sadness after someone has died.</span>
+        </div>
+
+        <div class="word">
+            <strong>empire</strong>
+            <span>A large group of countries ruled by one leader or government.</span>
+        </div>
+
+        <div class="word">
+            <strong>jubilee</strong>
+            <span>A special celebration of an important anniversary.</span>
+        </div>
+
+    </div>
+
+
+    <footer>
+        © SFS — sourced and fact-checked history for schools
+    </footer>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SAVED HIGHLIGHTER
+   ========================= */
+
+const HIGHLIGHT_KEY = "queenVictoriaHighlightsV1";
+
+const page = document.querySelector(".page");
+
+const toggle = document.getElementById("highlightToggle");
+
+const clear = document.getElementById("clearHighlights");
+
+let highlightMode = false;
+
+
+/* LOAD SAVED HIGHLIGHTS */
+
+const savedPage = localStorage.getItem(HIGHLIGHT_KEY);
+
+if (savedPage) {
+    page.innerHTML = savedPage;
+}
+
+
+/* SAVE HIGHLIGHTS */
+
+function saveHighlights() {
+
+    localStorage.setItem(
+        HIGHLIGHT_KEY,
+        page.innerHTML
+    );
+
+}
+
+
+/* TURN HIGHLIGHTER ON/OFF */
+
+toggle.addEventListener("click", function() {
+
+    highlightMode = !highlightMode;
+
+    toggle.classList.toggle(
+        "active",
+        highlightMode
+    );
+
+    toggle.textContent = highlightMode
+        ? "🖍️ Highlighter: ON"
+        : "🖍️ Highlighter: OFF";
+
+    document.body.classList.toggle(
+        "highlight-mode",
+        highlightMode
+    );
+
+});
+
+
+/* HIGHLIGHT SELECTED TEXT */
+
+document.addEventListener("mouseup", function() {
+
+    if (!highlightMode) {
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    if (!selection) {
+        return;
+    }
+
+    if (selection.rangeCount === 0) {
+        return;
+    }
+
+    if (selection.isCollapsed) {
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if (!page.contains(range.commonAncestorContainer)) {
+        return;
+    }
+
+    const selectedText = selection.toString().trim();
+
+    if (!selectedText) {
+        return;
+    }
+
+
+    /* MAKE SURE IT IS NOT SPANNING MULTIPLE PARAGRAPHS */
+
+    const startBlock = getTextBlock(
+        range.startContainer
+    );
+
+    const endBlock = getTextBlock(
+        range.endContainer
+    );
+
+    if (!startBlock || startBlock !== endBlock) {
+
+        selection.removeAllRanges();
+
+        return;
+    }
+
+
+    try {
+
+        const mark = document.createElement("mark");
+
+        mark.className = "user-highlight";
+
+        mark.title = "Saved highlight";
+
+
+        const highlightedContent =
+            range.extractContents();
+
+
+        mark.appendChild(
+            highlightedContent
+        );
+
+
+        range.insertNode(mark);
+
+
+        saveHighlights();
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Could not highlight this selection."
+        );
+
+    }
+
+
+    selection.removeAllRanges();
+
+});
+
+
+/* FIND THE TEXT BLOCK */
+
+function getTextBlock(node) {
+
+    if (node.nodeType === Node.TEXT_NODE) {
+
+        node = node.parentElement;
+
+    }
+
+    if (!node || !page.contains(node)) {
+
+        return null;
+
+    }
+
+    return node.closest(
+        "p, h1, h2, h3, .intro, .timeline-item, .word, .fact"
+    );
+
+}
+
+
+/* CLEAR ALL HIGHLIGHTS */
+
+clear.addEventListener("click", function() {
+
+    const answer = confirm(
+        "Clear all your highlights?"
+    );
+
+    if (!answer) {
+        return;
+    }
+
+
+    page.querySelectorAll(
+        "mark.user-highlight"
+    ).forEach(function(mark) {
+
+        mark.replaceWith(
+            ...mark.childNodes
+        );
+
+    });
+
+
+    saveHighlights();
+
+});
+
+
+</script>
+
+</body>
+</html>
