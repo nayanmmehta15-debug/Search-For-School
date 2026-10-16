@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>SFS queen Victoria</title>
-   <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- SFS FAVICON: TRANSPARENT BACKGROUND, RED MAGNIFYING GLASS -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='25' cy='25' r='16' fill='none' stroke='%23e00000' stroke-width='7'/%3E%3Cpath d='M37 37 L55 55' stroke='%23e00000' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E">
+
 <title>Queen Victoria</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -22,43 +20,133 @@ body {
     color: #6f6a73;
     font-family: Georgia, "Times New Roman", serif;
     line-height: 1.7;
+    overflow-x: hidden;
 }
 
-/* HIGHLIGHTER BAR */
-
-.highlight-toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    padding: 12px;
-    background: white;
-    border-bottom: 2px solid #d19a22;
-}
-
-.highlight-toolbar button {
-    border: 2px solid #d19a22;
+/* TOOLS BUTTON */
+.tools-main-button {
+    position: fixed;
+    top: 15px;
+    right: 18px;
+    z-index: 10001;
+    border: 1px solid #d19a22;
     background: white;
     color: #80631d;
-    padding: 10px 18px;
-    border-radius: 25px;
-    font-size: 15px;
-    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.highlight-toolbar button:hover {
-    background: #fff5c7;
+.tools-main-button:hover {
+    background: #fffaf0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
-.highlight-toolbar button.active {
+.tools-main-button.active {
+    background: #fff5d6;
+}
+
+/* TOOLS MENU */
+.tools-menu {
+    position: fixed;
+    top: 58px;
+    right: 18px;
+    z-index: 10000;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px;
+    background: white;
+    border: 1px solid #d19a22;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    min-width: 190px;
+    transform-origin: top right;
+}
+
+.tools-menu.closed {
+    display: none;
+}
+
+.tools-menu.open {
+    display: flex;
+    animation: toolsSpring 0.4s cubic-bezier(.17,.89,.32,1.28);
+}
+
+@keyframes toolsSpring {
+    0% { opacity: 0; transform: scale(0.7); }
+    60% { opacity: 1; transform: scale(1.05); }
+    80% { transform: scale(0.97); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* TOOL BUTTONS */
+.tools-menu > button:not(.colour-button) {
+    border: 1px solid #d19a22;
+    background: white;
+    color: #80631d;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+.tools-menu > button:not(.colour-button):hover {
+    background: #fffaf0;
+}
+
+.tools-menu > button.active {
     background: #ffe36e;
 }
 
+/* COLOUR PICKERS */
+.colour-picker {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px;
+    border: 1px solid #d19a22;
+    border-radius: 9px;
+    background: #fffdf8;
+}
+
+.colour-picker.show {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.colour-button {
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 2px solid #777 !important;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.colour-button:hover {
+    transform: scale(1.12);
+}
+
+.colour-button.selected {
+    outline: 2px solid #d19a22;
+    outline-offset: 2px;
+}
+
+/* HIGHLIGHTS */
 mark.user-highlight {
-    background: #ffe36e;
     color: inherit;
     padding: 1px 3px;
     border-radius: 3px;
@@ -68,30 +156,132 @@ body.highlight-mode {
     cursor: text;
 }
 
-/* MAIN PAGE */
+/* NOTES BOOK */
+.notes-book {
+    position: fixed;
+    right: 20px;
+    top: 90px;
+    width: 360px;
+    max-width: calc(100vw - 40px);
+    height: min(600px, calc(100vh - 115px));
+    background: white;
+    border: 3px solid #d19a22;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    z-index: 99999;
+    display: none !important;
+    flex-direction: column;
+    overflow: hidden;
+}
 
+.notes-book.open {
+    display: flex !important;
+}
+
+.notes-header {
+    flex-shrink: 0;
+    background: #faf7ef;
+    padding: 16px;
+    border-bottom: 2px solid #d19a22;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.notes-header h3 {
+    margin: 0;
+    color: #967329;
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.notes-header .close-notes {
+    border: none !important;
+    background: transparent !important;
+    font-size: 28px !important;
+    cursor: pointer;
+    color: #80631d !important;
+    padding: 0 5px !important;
+    flex-shrink: 0;
+}
+
+.notes-content {
+    padding: 18px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.note-item {
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    color: #514c55;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+
+.no-notes {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+/* DRAWING CANVAS */
+#drawingCanvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 500;
+    pointer-events: none;
+}
+
+body.pen-mode {
+    cursor: crosshair;
+}
+
+body.pen-mode #drawingCanvas {
+    pointer-events: auto;
+    touch-action: none;
+}
+
+/* MAIN PAGE */
 .page {
     max-width: 1100px;
     margin: auto;
     padding: 35px 55px 70px;
 }
 
-.source {
-    text-align: center;
-    color: #aaa;
-    font-size: 14px;
-    letter-spacing: 2px;
-    margin-bottom: 25px;
-}
-
+/* SFS LOGO */
 .logo {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw + 5px);
+    padding-left: 8px;
     color: #e00000;
     font-family: Arial, sans-serif;
-    font-size: 42px;
+    font-size: 72px;
     font-weight: 900;
+    line-height: 1;
     margin-bottom: 10px;
 }
 
+.logo::before {
+    display: none;
+}
+
+.logo::after {
+    content: "";
+    display: block;
+    width: calc(100% + 8px);
+    height: 4px;
+    margin-left: -8px;
+    margin-top: 10px;
+    background-color: #000;
+}
+
+/* PAGE TITLE */
 .title {
     text-align: center;
     color: #967329;
@@ -130,7 +320,6 @@ body.highlight-mode {
 }
 
 /* FACT BOX */
-
 .facts {
     border: 2px solid #d9a52e;
     border-radius: 8px;
@@ -162,7 +351,6 @@ body.highlight-mode {
 }
 
 /* INTRO */
-
 .intro {
     font-size: 25px;
     line-height: 1.65;
@@ -178,7 +366,6 @@ body.highlight-mode {
 }
 
 /* SECTIONS */
-
 section {
     margin: 70px 0;
 }
@@ -203,7 +390,6 @@ p {
 }
 
 /* TIMELINE */
-
 .timeline {
     border-left: 5px solid #d19a22;
     padding-left: 30px;
@@ -223,7 +409,6 @@ p {
 }
 
 /* WOW WORDS */
-
 .wow-box {
     background: #faf7ef;
     border: 3px solid #d19a22;
@@ -251,20 +436,28 @@ p {
     font-size: 19px;
 }
 
-footer {
-    text-align: center;
-    color: #999;
-    margin-top: 70px;
-    padding-top: 30px;
-    border-top: 2px solid #ddd;
-}
-
 /* MOBILE */
-
 @media (max-width: 700px) {
+    .tools-main-button {
+        top: 10px;
+        right: 10px;
+    }
+
+    .tools-menu {
+        top: 53px;
+        right: 10px;
+        min-width: 180px;
+    }
 
     .page {
         padding: 25px 20px;
+    }
+
+    .logo {
+        margin-left: 0;
+        padding-left: 8px;
+        width: 100vw;
+        font-size: 64px;
     }
 
     .title {
@@ -296,115 +489,165 @@ footer {
     .intro {
         font-size: 18px;
     }
-}
 
+    .notes-book {
+        right: 10px;
+        top: 100px;
+        width: calc(100vw - 20px);
+        max-width: calc(100vw - 20px);
+        height: calc(100vh - 120px);
+    }
+}
 </style>
 </head>
 
 <body>
 
-<!-- HIGHLIGHTER BUTTONS -->
+<!-- TOOLS BUTTON -->
+<button id="toolsButton"
+        class="tools-main-button"
+        type="button"
+        aria-expanded="false">
+    Tools
+</button>
 
-<div class="highlight-toolbar">
+<!-- TOOLS MENU -->
+<div class="tools-menu closed" id="toolsMenu">
 
-    <button id="highlightToggle">
+    <button id="highlightToggle" type="button">
         🖍️ Highlighter: OFF
     </button>
 
-    <button id="clearHighlights">
+    <div class="colour-picker" id="highlightColours">
+        <button class="colour-button selected" data-color="#ffe36e"
+            style="background:#ffe36e;" title="Yellow"
+            aria-label="Yellow highlighter"></button>
+
+        <button class="colour-button" data-color="#ff9ecb"
+            style="background:#ff9ecb;" title="Pink"
+            aria-label="Pink highlighter"></button>
+
+        <button class="colour-button" data-color="#8ec5ff"
+            style="background:#8ec5ff;" title="Blue"
+            aria-label="Blue highlighter"></button>
+
+        <button class="colour-button" data-color="#9be7a8"
+            style="background:#9be7a8;" title="Green"
+            aria-label="Green highlighter"></button>
+
+        <button class="colour-button" data-color="#ffb45c"
+            style="background:#ffb45c;" title="Orange"
+            aria-label="Orange highlighter"></button>
+    </div>
+
+    <button id="penToggle" type="button">
+        🖊️ Pen: OFF
+    </button>
+
+    <div class="colour-picker" id="penColours">
+        <button class="colour-button selected" data-color="#000000"
+            style="background:#000000;" title="Black"
+            aria-label="Black pen"></button>
+
+        <button class="colour-button" data-color="#e00000"
+            style="background:#e00000;" title="Red"
+            aria-label="Red pen"></button>
+
+        <button class="colour-button" data-color="#1769aa"
+            style="background:#1769aa;" title="Blue"
+            aria-label="Blue pen"></button>
+
+        <button class="colour-button" data-color="#198754"
+            style="background:#198754;" title="Green"
+            aria-label="Green pen"></button>
+
+        <button class="colour-button" data-color="#7b2cbf"
+            style="background:#7b2cbf;" title="Purple"
+            aria-label="Purple pen"></button>
+
+        <button class="colour-button" data-color="#f28c28"
+            style="background:#f28c28;" title="Orange"
+            aria-label="Orange pen"></button>
+
+        <button class="colour-button" data-color="#ff4fa3"
+            style="background:#ff4fa3;" title="Pink"
+            aria-label="Pink pen"></button>
+    </div>
+
+    <button id="notesButton" type="button"
+        aria-controls="notesBook" aria-expanded="false">
+        📚 Notes Book
+    </button>
+
+    <button id="clearHighlights" type="button">
         🗑️ Clear Highlights
     </button>
 
+    <button id="clearDrawing" type="button">
+        🧹 Clear Drawing
+    </button>
 </div>
 
+<!-- NOTES BOOK -->
+<div class="notes-book" id="notesBook" aria-hidden="true">
+    <div class="notes-header">
+        <h3>📚 My Highlighted Notes</h3>
+        <button class="close-notes" id="closeNotes" type="button"
+            aria-label="Close Notes Book">×</button>
+    </div>
 
+    <div class="notes-content" id="notesContent">
+        <div class="no-notes">
+            You haven't highlighted anything yet.
+        </div>
+    </div>
+</div>
+
+<canvas id="drawingCanvas"></canvas>
+
+<!-- MAIN PAGE -->
 <div class="page">
 
-    <div class="source">
-        A HISTORY RESOURCE FROM
-    </div>
-    </div>
+    <div class="logo">sfs</div>
 
-    <h1 class="title">
-        Queen Victoria
-    </h1>
+    <h1 class="title">Queen Victoria</h1>
 
     <div class="subtitle">
         The lonely girl who became the ruler of an empire
     </div>
 
-    <div class="dates">
-        1819 to 1901
-    </div>
+    <div class="dates">1819 to 1901</div>
 
     <hr class="gold-line">
 
-
-    <!-- FACTS -->
-
     <div class="facts">
-
         <div class="fact">
-
-            <div class="fact-title">
-                Born
-            </div>
-
+            <div class="fact-title">Born</div>
             <div class="fact-value">
                 24 May 1819,<br>
                 Kensington Palace,<br>
                 London
             </div>
-
         </div>
 
-
         <div class="fact">
-
-            <div class="fact-title">
-                Reigned for
-            </div>
-
-            <div class="fact-value">
-                63 years and 7 months
-            </div>
-
+            <div class="fact-title">Reigned for</div>
+            <div class="fact-value">63 years and 7 months</div>
         </div>
 
-
         <div class="fact">
-
-            <div class="fact-title">
-                Husband
-            </div>
-
-            <div class="fact-value">
-                Prince Albert
-            </div>
-
+            <div class="fact-title">Husband</div>
+            <div class="fact-value">Prince Albert</div>
             <br>
-
-            <div class="fact-title">
-                Children
-            </div>
-
-            <div class="fact-value">
-                Nine
-            </div>
-
+            <div class="fact-title">Children</div>
+            <div class="fact-value">Nine</div>
         </div>
-
     </div>
 
-
-    <!-- INTRO -->
-
     <div class="intro">
-
-        <span class="drop-cap">I</span>
-
-        magine waking up one morning as an ordinary eighteen-year-old
+        <span class="drop-cap">I</span>magine waking up one morning as an ordinary eighteen-year-old
         and being told that you are now the queen of the whole country.
+
         That is exactly what happened to Queen Victoria.
 
         She went on to <span class="wow">reign</span> for more than
@@ -416,801 +659,683 @@ footer {
 
         In this page, I am going to tell you all about her extraordinary
         life, from her lonely childhood to her magnificent funeral.
-
     </div>
 
-
-    <!-- LONELY CHILDHOOD -->
-
     <section>
-
-        <h2>
-            A Lonely Childhood
-        </h2>
-
+        <h2>A Lonely Childhood</h2>
         <p>
-            Victoria was born on 24 May 1819 at Kensington Palace in London.
-            Her full name was Alexandrina Victoria. She was named Alexandrina
-            after her godfather, the Tsar of Russia, and Victoria after her mother.
+            Victoria was born on <span class="wow">24 May 1819</span>
+            at Kensington Palace in London.
+            Her father, Prince Edward, Duke of Kent, died when Victoria
+            was less than a year old.
         </p>
-
         <p>
-            Her father, Prince Edward, the Duke of Kent, died when she was
-            only eight months old, so she was brought up by her mother,
-            who came from Germany. Victoria grew up speaking German as well
-            as English.
+            Victoria was raised mainly by her mother, the Duchess of Kent.
+            Her childhood was very controlled and she was rarely allowed
+            to be alone.
         </p>
-
         <p>
-            You might think that growing up as a princess would be glamorous,
-            but Victoria's childhood was strict and rather lonely.
-            Her mother and a man called Sir John Conroy invented a set of
-            rules known as the Kensington System.
+            Victoria's childhood was unusual because everyone knew that
+            she might one day become queen. She was taught history,
+            languages, music, drawing and other subjects that would
+            prepare her for her future role.
         </p>
-
-        <p>
-            Under these rules, Victoria hardly ever met other children.
-            She had to sleep in her mother's bedroom every night, and she
-            was not even allowed to walk down the stairs without holding
-            someone's hand.
-        </p>
-
-        <p>
-            Her main companions were her kind governess, Baroness Lehzen,
-            her pet spaniel, Dash, and her collection of more than 130
-            wooden dolls, which she dressed in tiny costumes.
-        </p>
-
     </section>
 
-
-    <!-- BECOMING QUEEN -->
-
     <section>
-
-        <h2>
-            Becoming Queen
-        </h2>
-
+        <h2>Becoming Queen</h2>
         <p>
-            At about six o'clock in the morning on 20 June 1837,
-            Victoria was woken up and told that her uncle,
-            King William IV, had died.
+            Victoria's uncle, King William IV, died on
+            <span class="wow">20 June 1837</span>.
+            Victoria was only eighteen years old.
         </p>
-
         <p>
-            The Archbishop of Canterbury and the Lord Chamberlain
-            had rushed to Kensington Palace to give her the news.
-            At just eighteen years old, she was now the queen.
+            She became <span class="wow">Queen of the United Kingdom</span>
+            and began one of the longest reigns in British history.
         </p>
-
         <p>
-            Legend says that she came downstairs in her dressing gown
-            with her hair hanging loose.
+            Her coronation took place on <span class="wow">28 June 1838</span>
+            at Westminster Abbey.
         </p>
-
         <p>
-            Victoria was <span class="wow">determined</span> to show
-            that she was ready.
+            Victoria quickly became a powerful symbol of Britain's
+            changing nineteenth-century society.
         </p>
-
-        <p>
-            Her very first decision was to be called Victoria instead
-            of Alexandrina.
-        </p>
-
-        <p>
-            She also asked for an hour on her own, and soon afterwards
-            she moved her bed out of her mother's room.
-            It was her first taste of independence.
-        </p>
-
-        <p>
-            A few weeks later, she became the first monarch to live
-            at Buckingham Palace.
-        </p>
-
-        <p>
-            Her coronation took place at Westminster Abbey on
-            28 June 1838, when she was nineteen.
-            Crowds packed the streets of London to see her,
-            and it was a <span class="wow">glorious</span> day.
-        </p>
-
-        <p>
-            At first, Victoria relied on the prime minister,
-            Lord Melbourne, who taught her how the government worked.
-        </p>
-
     </section>
 
-
-    <!-- LOVE AND FAMILY -->
-
     <section>
-
-        <h2>
-            Love and Family
-        </h2>
-
+        <h2>Prince Albert</h2>
         <p>
-            In 1839, Victoria's cousin, Prince Albert of
-            Saxe-Coburg and Gotha, came to visit.
-            She liked him immediately.
+            Victoria married her cousin,
+            <span class="wow">Prince Albert of Saxe-Coburg and Gotha</span>,
+            in 1840.
         </p>
-
         <p>
-            Because Victoria was queen, nobody was allowed to propose
-            to her, so she had to ask him herself. Luckily, he said yes!
+            They eventually had <span class="wow">nine children</span>.
+            Their children married into several European royal families,
+            helping create a large network of royal relatives.
         </p>
-
         <p>
-            They got married on 10 February 1840.
-            Victoria wore a white satin dress decorated with orange blossom.
+            Albert became an important adviser to Victoria.
+            He was interested in science, technology, education and the arts.
         </p>
-
-        <p>
-            Before then, brides wore all sorts of colours, but after
-            Victoria's wedding, white became the fashionable choice,
-            and lots of brides still choose it today.
-        </p>
-
-        <p>
-            Victoria and Albert were <span class="wow">devoted</span>
-            to each other, and they had nine children.
-        </p>
-
-        <p>
-            Albert was clever, hardworking and full of ideas about science,
-            art and education. He also helped to make Christmas trees
-            popular in Britain.
-        </p>
-
     </section>
 
-
-    <!-- GREAT EXHIBITION -->
-
     <section>
-
-        <h2>
-            The Great Exhibition
-        </h2>
-
+        <h2>Britain Changes</h2>
         <p>
-            Prince Albert's most famous project was the Great Exhibition
-            of 1851.
+            During Victoria's reign, Britain changed dramatically.
+            The <span class="wow">Industrial Revolution</span>
+            transformed the country.
         </p>
-
         <p>
-            It was held in Hyde Park inside a gigantic building made of
-            glass and iron, which people nicknamed the Crystal Palace.
+            Factories became more important, cities grew rapidly and
+            new machines changed the way people worked and travelled.
         </p>
-
         <p>
-            Inside, there were thousands of inventions and treasures from
-            around the world, including machines, jewels and
-            <span class="wow">enormous</span> steam engines.
+            Britain's railway network expanded enormously.
+            Steam trains made it much easier for people and goods
+            to travel across the country.
         </p>
-
         <p>
-            More than six million people visited over five months,
-            and Victoria enjoyed it so much that she went back again and again.
+            New inventions and discoveries also changed everyday life.
         </p>
-
     </section>
 
-
-    <!-- TIME OF GREAT CHANGE -->
-
     <section>
-
-        <h2>
-            A Time of Great Change
-        </h2>
-
+        <h2>The Great Exhibition</h2>
         <p>
-            Britain changed enormously while Victoria was queen.
-            Railways spread across the country, so people could travel
-            faster than ever before.
+            One of the most famous events of Victoria's reign was the
+            <span class="wow">Great Exhibition of 1851</span>.
         </p>
-
         <p>
-            In 1840, the Penny Post began, and the Penny Black,
-            the world's first sticky postage stamp, had a picture
-            of Victoria's head on it.
+            It was held inside the enormous
+            <span class="wow">Crystal Palace</span>
+            in London's Hyde Park.
         </p>
-
         <p>
-            The electric telegraph let messages be sent in minutes
-            instead of days.
+            The exhibition showed inventions, machinery, artwork and
+            products from Britain and countries around the world.
         </p>
-
         <p>
-            Factories grew, and towns and cities became crowded.
+            Prince Albert played an important role in organising
+            the exhibition.
         </p>
-
-        <p>
-            In 1858, the River Thames smelled so terrible that people
-            called it the Great Stink.
-        </p>
-
-        <p>
-            The engineer Joseph Bazalgette solved the problem by building
-            a huge network of sewers, which made London much healthier.
-            Many of those sewers are still used today.
-        </p>
-
-        <p>
-            However, not everything was wonderful.
-            Many poor families lived in dirty, crowded houses,
-            and thousands of children worked long hours in factories,
-            mines and chimneys.
-        </p>
-
-        <p>
-            Slowly, new laws were passed to protect them.
-            In 1870, the Education Act was passed to make sure there
-            were schools for children across England and Wales.
-        </p>
-
     </section>
 
-
-    <!-- SADNESS AND MOURNING -->
-
     <section>
-
-        <h2>
-            Sadness and Mourning
-        </h2>
-
+        <h2>The British Empire</h2>
         <p>
-            In December 1861, tragedy struck.
-            Prince Albert became seriously ill and died on 14 December
-            at the age of only forty-two.
+            During Victoria's reign, the British Empire expanded and
+            changed. Britain controlled territories in many parts
+            of the world.
         </p>
-
         <p>
-            Victoria was <span class="wow">heartbroken</span>.
-            She wore black for the rest of her life, which was about
-            forty years, and she hardly appeared in public for a long time.
+            In <span class="wow">1876</span>, Victoria was given the title
+            <span class="wow">Empress of India</span>.
         </p>
-
         <p>
-            This period of <span class="wow">mourning</span> was so long
-            that people began to call her the Widow of Windsor.
+            The empire brought Britain enormous power, but imperial rule
+            also involved conflict, inequality and the loss of control
+            by people in territories ruled by Britain.
         </p>
-
         <p>
-            Gradually, Victoria returned to her duties.
-            She loved spending time at Balmoral Castle in Scotland
-            and Osborne House on the Isle of Wight.
+            Understanding the Victorian period therefore means studying
+            both Britain's achievements and the difficult consequences
+            of empire.
         </p>
-
-        <p>
-            She became close friends with her Scottish servant,
-            John Brown, who cheered her up.
-        </p>
-
-        <p>
-            Later, she worked with two important prime ministers,
-            Benjamin Disraeli and William Gladstone,
-            although she liked one of them far more than the other.
-        </p>
-
     </section>
 
-
-    <!-- EMPRESS OF INDIA -->
-
     <section>
-
-        <h2>
-            Empress of India
-        </h2>
-
+        <h2>A Devastating Loss</h2>
         <p>
-            During Victoria's reign, the British Empire grew to be
-            the largest in history.
+            In <span class="wow">1861</span>, Prince Albert became
+            seriously ill and died at Windsor Castle.
         </p>
-
         <p>
-            At its height, it covered about a quarter of the land on Earth
-            and included countries such as India, Canada, Australia and
-            parts of Africa.
+            Victoria was devastated by his death. She spent many years
+            mourning him and wore black clothing for much of the rest
+            of her life.
         </p>
-
         <p>
-            In 1876, Victoria was given the extra title of
-            Empress of India.
+            Although she withdrew from some public life for a period,
+            she eventually returned to many of her royal duties.
         </p>
-
-        <p>
-            It is important to remember that many people in the empire
-            did not choose to be ruled by Britain, and some of them
-            suffered greatly.
-        </p>
-
-        <p>
-            Historians still discuss whether the empire was fair.
-        </p>
-
     </section>
 
-
-    <!-- GRANDMOTHER OF EUROPE -->
-
     <section>
-
-        <h2>
-            Grandmother of Europe
-        </h2>
-
+        <h2>The Victorian Era</h2>
         <p>
-            Victoria's children and grandchildren married into royal
-            families all over Europe, which earned her the nickname
-            the Grandmother of Europe.
+            Victoria's name became connected with an entire era.
+            The <span class="wow">Victorian era</span> lasted from
+            her accession in 1837 until her death in 1901.
         </p>
-
         <p>
-            Her grandchildren included Kaiser Wilhelm II of Germany,
-            Tsarina Alexandra of Russia and King George V of Britain.
+            Victorian Britain saw major developments in science,
+            engineering, literature, education and transport.
         </p>
-
         <p>
-            Being a queen could also be dangerous.
-            At least seven different people tried to attack her during
-            her life, but she survived every single time.
+            Famous writers such as Charles Dickens, George Eliot and
+            Thomas Hardy produced important works during the period.
         </p>
-
     </section>
 
-
-    <!-- TWO BIG CELEBRATIONS -->
-
     <section>
-
-        <h2>
-            Two Big Celebrations
-        </h2>
-
+        <h2>Victoria's Jubilees</h2>
         <p>
-            In 1887, Britain celebrated her Golden Jubilee to mark
-            fifty years on the throne, with parties and processions
-            across the country.
+            Victoria's long reign meant that she celebrated several
+            major anniversaries of becoming queen.
         </p>
-
         <p>
-            Ten years later, in 1897, came the Diamond Jubilee for
-            sixty years, and it was even bigger.
+            Her <span class="wow">Golden Jubilee</span> took place in
+            1887, marking fifty years on the throne.
         </p>
-
         <p>
-            Soldiers from all over the empire marched through London.
+            Her <span class="wow">Diamond Jubilee</span> took place in
+            1897, marking sixty years as queen.
         </p>
-
         <p>
-            By then, Victoria was old and found walking difficult,
-            so she stayed in her carriage while a special service was
-            held outside St Paul's Cathedral.
+            These celebrations showed how famous and important Victoria
+            had become to many people in Britain and across the empire.
         </p>
-
     </section>
 
-
-    <!-- END OF AN ERA -->
-
     <section>
-
-        <h2>
-            The End of an Era
-        </h2>
-
+        <h2>The End of an Era</h2>
         <p>
-            Queen Victoria died on 22 January 1901 at Osborne House,
-            aged eighty-one.
+            Queen Victoria died on <span class="wow">22 January 1901</span>
+            at Osborne House on the Isle of Wight.
         </p>
-
         <p>
-            She had reigned for 63 years and 7 months.
-            Her son then became King Edward VII.
+            She had been queen for
+            <span class="wow">63 years and 7 months</span>.
         </p>
-
+        <p>
+            Her death marked the end of the Victorian era.
+            Her son Edward became King Edward VII.
+        </p>
+        <p>
+            Victoria's funeral was a huge national event watched by
+            enormous crowds.
+        </p>
     </section>
 
-
-    <!-- WHY SHE STILL MATTERS -->
-
     <section>
-
-        <h2>
-            Why She Still Matters
-        </h2>
-
+        <h2>Victoria's Legacy</h2>
         <p>
-            Queen Victoria left behind a great deal.
-            The Victoria Cross, the highest medal for bravery in the
-            British armed forces, was created in 1856 and is still
-            awarded today.
+            Queen Victoria remains one of the most famous monarchs
+            in British history.
         </p>
-
         <p>
-            Places all over the world are named after her,
-            such as Victoria Falls in Africa, the state of Victoria
-            in Australia and the city of Victoria in Canada.
+            Her reign saw enormous changes in technology, transport,
+            science, industry and society.
         </p>
-
         <p>
-            She also wrote in her journal almost every day from the age
-            of thirteen, so we know an incredible amount about her
-            thoughts and feelings.
+            The period also had serious problems, including poverty,
+            inequality and the effects of Britain's expanding empire.
         </p>
-
         <p>
-            In my opinion, Queen Victoria was a remarkable person.
-            She began as a lonely girl who was kept away from the world,
-            yet she became one of the most powerful and famous women
-            in history.
+            That is why studying Victoria is useful: it helps us
+            understand both the <span class="wow">achievements</span>
+            and the <span class="wow">problems</span> of
+            nineteenth-century Britain.
         </p>
-
     </section>
 
-
-    <!-- TIMELINE -->
-
     <section>
-
-        <h2>
-            Victoria's Life in Order
-        </h2>
+        <h2>Queen Victoria Timeline</h2>
 
         <div class="timeline">
-
             <div class="timeline-item">
                 <span class="year">1819</span>
                 Victoria is born at Kensington Palace.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1837</span>
-                She becomes queen at the age of eighteen.
+                Victoria becomes Queen of the United Kingdom.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1838</span>
-                Her coronation takes place at Westminster Abbey.
+                Victoria is crowned at Westminster Abbey.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1840</span>
-                She marries Prince Albert, and the Penny Black stamp is launched.
+                Victoria marries Prince Albert.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1851</span>
-                The Great Exhibition opens in the Crystal Palace.
+                The Great Exhibition opens in London.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1861</span>
-                Prince Albert dies, and Victoria begins her mourning.
+                Prince Albert dies.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1876</span>
-                She is given the title Empress of India.
+                Victoria becomes Empress of India.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1887</span>
-                The Golden Jubilee is celebrated.
+                Victoria celebrates her Golden Jubilee.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1897</span>
-                The Diamond Jubilee is celebrated.
+                Victoria celebrates her Diamond Jubilee.
             </div>
-
             <div class="timeline-item">
                 <span class="year">1901</span>
-                Victoria dies at Osborne House.
+                Queen Victoria dies at Osborne House.
             </div>
-
         </div>
-
     </section>
 
-
-    <!-- WOW WORDS -->
-
     <div class="wow-box">
-
-        <h2>
-            Wow Words
-        </h2>
+        <h2>🧠 Wow Words</h2>
 
         <div class="word">
-            <strong>reign</strong>
-            <span>To rule as a king or queen.</span>
+            <strong>Monarch</strong>
+            <span>A king or queen who rules a country.</span>
         </div>
 
         <div class="word">
-            <strong>monarch</strong>
-            <span>A king or queen.</span>
+            <strong>Reign</strong>
+            <span>The period during which a monarch rules.</span>
         </div>
 
         <div class="word">
-            <strong>remarkable</strong>
-            <span>So special that people notice it.</span>
+            <strong>Empire</strong>
+            <span>A group of territories or countries controlled by one power.</span>
         </div>
 
         <div class="word">
-            <strong>magnificent</strong>
-            <span>Very grand and impressive.</span>
+            <strong>Industrial Revolution</strong>
+            <span>A period of major industrial and technological change.</span>
         </div>
 
         <div class="word">
-            <strong>determined</strong>
-            <span>Having made up your mind not to give up.</span>
+            <strong>Jubilee</strong>
+            <span>A celebration of an important anniversary.</span>
         </div>
 
         <div class="word">
-            <strong>coronation</strong>
-            <span>The ceremony where a king or queen is crowned.</span>
+            <strong>Coronation</strong>
+            <span>The ceremony in which a monarch is formally crowned.</span>
         </div>
 
         <div class="word">
-            <strong>glorious</strong>
-            <span>Wonderful and full of splendour.</span>
+            <strong>Victorian</strong>
+            <span>Relating to the period when Queen Victoria was monarch.</span>
         </div>
 
         <div class="word">
-            <strong>devoted</strong>
-            <span>Loving someone very much and staying loyal to them.</span>
+            <strong>Exhibition</strong>
+            <span>A public event where objects, inventions or ideas are displayed.</span>
         </div>
 
         <div class="word">
-            <strong>enormous</strong>
-            <span>Extremely big.</span>
+            <strong>Legacy</strong>
+            <span>The lasting impact or influence left behind by someone.</span>
         </div>
-
-        <div class="word">
-            <strong>heartbroken</strong>
-            <span>Feeling terribly sad.</span>
-        </div>
-
-        <div class="word">
-            <strong>mourning</strong>
-            <span>Showing sadness after someone has died.</span>
-        </div>
-
-        <div class="word">
-            <strong>empire</strong>
-            <span>A large group of countries ruled by one leader or government.</span>
-        </div>
-
-        <div class="word">
-            <strong>jubilee</strong>
-            <span>A special celebration of an important anniversary.</span>
-        </div>
-
     </div>
-
-
-    <footer>
-        © SFS — sourced and fact-checked history for schools
-    </footer>
 
 </div>
 
-
 <script>
+const toolsButton = document.getElementById("toolsButton");
+const toolsMenu = document.getElementById("toolsMenu");
+const highlightToggle = document.getElementById("highlightToggle");
+const penToggle = document.getElementById("penToggle");
+const highlightColours = document.getElementById("highlightColours");
+const penColours = document.getElementById("penColours");
+const notesButton = document.getElementById("notesButton");
+const notesBook = document.getElementById("notesBook");
+const closeNotes = document.getElementById("closeNotes");
+const notesContent = document.getElementById("notesContent");
+const clearHighlights = document.getElementById("clearHighlights");
+const clearDrawing = document.getElementById("clearDrawing");
 
-/* =========================
-   SAVED HIGHLIGHTER
-   ========================= */
+const HIGHLIGHT_STORAGE = "sfs_queen_victoria_highlights";
+const DRAWING_STORAGE = "sfs_queen_victoria_drawing";
 
-const HIGHLIGHT_KEY = "queenVictoriaHighlightsV1";
+/* TOOLS MENU */
+toolsButton.addEventListener("click", () => {
+    const isOpen = toolsMenu.classList.contains("open");
 
-const page = document.querySelector(".page");
-
-const toggle = document.getElementById("highlightToggle");
-
-const clear = document.getElementById("clearHighlights");
-
-let highlightMode = false;
-
-
-/* LOAD SAVED HIGHLIGHTS */
-
-const savedPage = localStorage.getItem(HIGHLIGHT_KEY);
-
-if (savedPage) {
-    page.innerHTML = savedPage;
-}
-
-
-/* SAVE HIGHLIGHTS */
-
-function saveHighlights() {
-
-    localStorage.setItem(
-        HIGHLIGHT_KEY,
-        page.innerHTML
-    );
-
-}
-
-
-/* TURN HIGHLIGHTER ON/OFF */
-
-toggle.addEventListener("click", function() {
-
-    highlightMode = !highlightMode;
-
-    toggle.classList.toggle(
-        "active",
-        highlightMode
-    );
-
-    toggle.textContent = highlightMode
-        ? "🖍️ Highlighter: ON"
-        : "🖍️ Highlighter: OFF";
-
-    document.body.classList.toggle(
-        "highlight-mode",
-        highlightMode
-    );
-
+    toolsMenu.classList.toggle("open", !isOpen);
+    toolsMenu.classList.toggle("closed", isOpen);
+    toolsButton.classList.toggle("active", !isOpen);
+    toolsButton.setAttribute("aria-expanded", String(!isOpen));
 });
 
+/* HIGHLIGHTER */
+let highlightMode = false;
+let highlightColor =
+    localStorage.getItem("sfs_queen_victoria_highlight_color") || "#ffe36e";
 
-/* HIGHLIGHT SELECTED TEXT */
+highlightToggle.addEventListener("click", () => {
+    highlightMode = !highlightMode;
+    highlightToggle.textContent =
+        highlightMode ? "🖍️ Highlighter: ON" : "🖍️ Highlighter: OFF";
+    highlightToggle.classList.toggle("active", highlightMode);
+    highlightColours.classList.toggle("show", highlightMode);
+    document.body.classList.toggle("highlight-mode", highlightMode);
+});
 
-document.addEventListener("mouseup", function() {
-
-    if (!highlightMode) {
-        return;
+/* HIGHLIGHT COLOURS */
+document.querySelectorAll("#highlightColours .colour-button")
+.forEach(button => {
+    if (button.dataset.color === highlightColor) {
+        document.querySelectorAll("#highlightColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+        button.classList.add("selected");
     }
+
+    button.addEventListener("click", () => {
+        highlightColor = button.dataset.color;
+
+        localStorage.setItem(
+            "sfs_queen_victoria_highlight_color",
+            highlightColor
+        );
+
+        document.querySelectorAll("#highlightColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+
+        button.classList.add("selected");
+    });
+});
+
+/* PEN */
+let penMode = false;
+let penColor =
+    localStorage.getItem("sfs_queen_victoria_pen_color") || "#000000";
+
+penToggle.addEventListener("click", () => {
+    penMode = !penMode;
+    penToggle.textContent = penMode ? "🖊️ Pen: ON" : "🖊️ Pen: OFF";
+    penToggle.classList.toggle("active", penMode);
+    penColours.classList.toggle("show", penMode);
+    document.body.classList.toggle("pen-mode", penMode);
+});
+
+/* PEN COLOURS */
+document.querySelectorAll("#penColours .colour-button")
+.forEach(button => {
+    if (button.dataset.color === penColor) {
+        document.querySelectorAll("#penColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+        button.classList.add("selected");
+    }
+
+    button.addEventListener("click", () => {
+        penColor = button.dataset.color;
+
+        localStorage.setItem(
+            "sfs_queen_victoria_pen_color",
+            penColor
+        );
+
+        document.querySelectorAll("#penColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+
+        button.classList.add("selected");
+    });
+});
+
+/* HIGHLIGHT TEXT */
+document.addEventListener("mouseup", () => {
+    if (!highlightMode) return;
 
     const selection = window.getSelection();
-
-    if (!selection) {
-        return;
-    }
-
-    if (selection.rangeCount === 0) {
-        return;
-    }
-
-    if (selection.isCollapsed) {
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    if (!page.contains(range.commonAncestorContainer)) {
-        return;
-    }
+    if (!selection || selection.isCollapsed) return;
 
     const selectedText = selection.toString().trim();
+    if (!selectedText) return;
 
-    if (!selectedText) {
-        return;
-    }
+    const range = selection.getRangeAt(0);
+    const mark = document.createElement("mark");
 
-
-    /* MAKE SURE IT IS NOT SPANNING MULTIPLE PARAGRAPHS */
-
-    const startBlock = getTextBlock(
-        range.startContainer
-    );
-
-    const endBlock = getTextBlock(
-        range.endContainer
-    );
-
-    if (!startBlock || startBlock !== endBlock) {
-
-        selection.removeAllRanges();
-
-        return;
-    }
-
+    mark.className = "user-highlight";
+    mark.style.backgroundColor = highlightColor;
 
     try {
-
-        const mark = document.createElement("mark");
-
-        mark.className = "user-highlight";
-
-        mark.title = "Saved highlight";
-
-
-        const highlightedContent =
-            range.extractContents();
-
-
-        mark.appendChild(
-            highlightedContent
-        );
-
-
-        range.insertNode(mark);
-
-
+        range.surroundContents(mark);
         saveHighlights();
-
+        updateNotes();
+        selection.removeAllRanges();
+    } catch (error) {
+        console.log("Please highlight text within one paragraph or section.");
     }
-
-    catch (error) {
-
-        console.log(
-            "Could not highlight this selection."
-        );
-
-    }
-
-
-    selection.removeAllRanges();
-
 });
 
+/* SAVE HIGHLIGHTS */
+function saveHighlights() {
+    const highlights = Array.from(
+        document.querySelectorAll("mark.user-highlight")
+    ).map(mark => ({
+        text: mark.textContent,
+        color: mark.style.backgroundColor
+    }));
 
-/* FIND THE TEXT BLOCK */
-
-function getTextBlock(node) {
-
-    if (node.nodeType === Node.TEXT_NODE) {
-
-        node = node.parentElement;
-
-    }
-
-    if (!node || !page.contains(node)) {
-
-        return null;
-
-    }
-
-    return node.closest(
-        "p, h1, h2, h3, .intro, .timeline-item, .word, .fact"
-    );
-
+    localStorage.setItem(HIGHLIGHT_STORAGE, JSON.stringify(highlights));
 }
 
+/* RESTORE HIGHLIGHTS */
+function restoreHighlights() {
+    let saved;
 
-/* CLEAR ALL HIGHLIGHTS */
+    try {
+        saved = JSON.parse(localStorage.getItem(HIGHLIGHT_STORAGE) || "[]");
+    } catch {
+        saved = [];
+    }
 
-clear.addEventListener("click", function() {
+    if (!Array.isArray(saved) || saved.length === 0) return;
 
-    const answer = confirm(
-        "Clear all your highlights?"
+    const walker = document.createTreeWalker(
+        document.querySelector(".page"),
+        NodeFilter.SHOW_TEXT
     );
 
-    if (!answer) {
+    const textNodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) {
+        if (node.parentElement.closest("mark.user-highlight")) continue;
+        textNodes.push(node);
+    }
+
+    saved.forEach(item => {
+        if (!item.text) return;
+
+        for (const textNode of textNodes) {
+            const text = textNode.nodeValue;
+            const index = text.indexOf(item.text);
+
+            if (index === -1) continue;
+
+            const range = document.createRange();
+            range.setStart(textNode, index);
+            range.setEnd(textNode, index + item.text.length);
+
+            const mark = document.createElement("mark");
+            mark.className = "user-highlight";
+            mark.style.backgroundColor = item.color || "#ffe36e";
+
+            try {
+                range.surroundContents(mark);
+                textNodes.splice(textNodes.indexOf(textNode), 1);
+            } catch (error) {
+                // Skip text that cannot be restored safely.
+            }
+
+            break;
+        }
+    });
+}
+
+/* NOTES BOOK */
+function updateNotes() {
+    const highlights = document.querySelectorAll("mark.user-highlight");
+    notesContent.innerHTML = "";
+
+    if (highlights.length === 0) {
+        notesContent.innerHTML =
+            '<div class="no-notes">You haven\'t highlighted anything yet.</div>';
         return;
     }
 
-
-    page.querySelectorAll(
-        "mark.user-highlight"
-    ).forEach(function(mark) {
-
-        mark.replaceWith(
-            ...mark.childNodes
-        );
-
+    highlights.forEach(mark => {
+        const note = document.createElement("div");
+        note.className = "note-item";
+        note.style.backgroundColor = mark.style.backgroundColor;
+        note.textContent = mark.textContent;
+        notesContent.appendChild(note);
     });
+}
 
+notesButton.addEventListener("click", () => {
+    const isOpen = notesBook.classList.contains("open");
 
-    saveHighlights();
-
+    if (isOpen) {
+        notesBook.classList.remove("open");
+        notesBook.setAttribute("aria-hidden", "true");
+        notesButton.setAttribute("aria-expanded", "false");
+    } else {
+        updateNotes();
+        notesBook.classList.add("open");
+        notesBook.setAttribute("aria-hidden", "false");
+        notesButton.setAttribute("aria-expanded", "true");
+    }
 });
 
+closeNotes.addEventListener("click", () => {
+    notesBook.classList.remove("open");
+    notesBook.setAttribute("aria-hidden", "true");
+    notesButton.setAttribute("aria-expanded", "false");
+});
 
+/* CLEAR HIGHLIGHTS */
+clearHighlights.addEventListener("click", () => {
+    document.querySelectorAll("mark.user-highlight").forEach(mark => {
+        const parent = mark.parentNode;
+
+        while (mark.firstChild) {
+            parent.insertBefore(mark.firstChild, mark);
+        }
+
+        parent.removeChild(mark);
+    });
+
+    localStorage.removeItem(HIGHLIGHT_STORAGE);
+    updateNotes();
+});
+
+/* DRAWING CANVAS */
+const canvas = document.getElementById("drawingCanvas");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+
+function resizeCanvas() {
+    const oldCanvas = document.createElement("canvas");
+    oldCanvas.width = canvas.width;
+    oldCanvas.height = canvas.height;
+
+    if (canvas.width > 0 && canvas.height > 0) {
+        oldCanvas.getContext("2d").drawImage(canvas, 0, 0);
+    }
+
+    canvas.width = document.documentElement.scrollWidth;
+    canvas.height = document.documentElement.scrollHeight;
+
+    if (oldCanvas.width > 0 && oldCanvas.height > 0) {
+        ctx.drawImage(oldCanvas, 0, 0);
+    }
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+/* DRAWING */
+canvas.addEventListener("pointerdown", event => {
+    if (!penMode) return;
+
+    drawing = true;
+    canvas.setPointerCapture(event.pointerId);
+
+    const rect = canvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(event.clientX - rect.left, event.clientY - rect.top);
+});
+
+canvas.addEventListener("pointermove", event => {
+    if (!drawing || !penMode) return;
+
+    const rect = canvas.getBoundingClientRect();
+
+    ctx.strokeStyle = penColor;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+    ctx.stroke();
+});
+
+function stopDrawing() {
+    if (!drawing) return;
+    drawing = false;
+    saveDrawing();
+}
+
+canvas.addEventListener("pointerup", stopDrawing);
+canvas.addEventListener("pointercancel", stopDrawing);
+
+/* SAVE DRAWING */
+function saveDrawing() {
+    try {
+        localStorage.setItem(DRAWING_STORAGE, canvas.toDataURL());
+    } catch (error) {
+        console.log("Drawing could not be saved.");
+    }
+}
+
+/* RESTORE DRAWING */
+function loadDrawing() {
+    const saved = localStorage.getItem(DRAWING_STORAGE);
+    if (!saved) return;
+
+    const image = new Image();
+
+    image.onload = () => {
+        ctx.drawImage(image, 0, 0);
+    };
+
+    image.src = saved;
+}
+
+/* CLEAR DRAWING */
+clearDrawing.addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem(DRAWING_STORAGE);
+});
+
+/* CLOSE TOOLS WHEN CLICKING OUTSIDE */
+document.addEventListener("click", event => {
+    if (!toolsMenu.contains(event.target) && event.target !== toolsButton) {
+        toolsMenu.classList.remove("open");
+        toolsMenu.classList.add("closed");
+        toolsButton.classList.remove("active");
+        toolsButton.setAttribute("aria-expanded", "false");
+    }
+});
+
+/* STARTUP */
+restoreHighlights();
+updateNotes();
+loadDrawing();
 </script>
-
+<h6>made by chatgpt</h6>
 </body>
 </html>
