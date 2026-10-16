@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SFS FAVICON: TRANSPARENT BACKGROUND, RED MAGNIFYING GLASS -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='25' cy='25' r='16' fill='none' stroke='%23e00000' stroke-width='7'/%3E%3Cpath d='M37 37 L55 55' stroke='%23e00000' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<title>Queen Victoria</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: white;
+    color: #6f6a73;
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* TOOLS BUTTON */
+.tools-main-button {
+    position: fixed;
+    top: 15px;
+    right: 18px;
+    z-index: 10001;
+    border: 1px solid #d19a22;
+    background: white;
+    color: #80631d;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tools-main-button:hover {
+    background: #fffaf0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.tools-main-button.active {
+    background: #fff5d6;
+}
+
+/* TOOLS MENU */
+.tools-menu {
+    position: fixed;
+    top: 58px;
+    right: 18px;
+    z-index: 10000;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px;
+    background: white;
+    border: 1px solid #d19a22;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    min-width: 190px;
+    transform-origin: top right;
+}
+
+.tools-menu.closed {
+    display: none;
+}
+
+.tools-menu.open {
+    display: flex;
+    animation: toolsSpring 0.4s cubic-bezier(.17,.89,.32,1.28);
+}
+
+@keyframes toolsSpring {
+    0% { opacity: 0; transform: scale(0.7); }
+    60% { opacity: 1; transform: scale(1.05); }
+    80% { transform: scale(0.97); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* TOOL BUTTONS */
+.tools-menu > button:not(.colour-button) {
+    border: 1px solid #d19a22;
+    background: white;
+    color: #80631d;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+.tools-menu > button:not(.colour-button):hover {
+    background: #fffaf0;
+}
+
+.tools-menu > button.active {
+    background: #ffe36e;
+}
+
+/* COLOUR PICKERS */
+.colour-picker {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px;
+    border: 1px solid #d19a22;
+    border-radius: 9px;
+    background: #fffdf8;
+}
+
+.colour-picker.show {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.colour-button {
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 2px solid #777 !important;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.colour-button:hover {
+    transform: scale(1.12);
+}
+
+.colour-button.selected {
+    outline: 2px solid #d19a22;
+    outline-offset: 2px;
+}
+
+/* HIGHLIGHTS */
+mark.user-highlight {
+    color: inherit;
+    padding: 1px 3px;
+    border-radius: 3px;
+}
+
+body.highlight-mode {
+    cursor: text;
+}
+
+/* NOTES BOOK */
+.notes-book {
+    position: fixed;
+    right: 20px;
+    top: 90px;
+    width: 360px;
+    max-width: calc(100vw - 40px);
+    height: min(600px, calc(100vh - 115px));
+    background: white;
+    border: 3px solid #d19a22;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    z-index: 99999;
+    display: none !important;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.notes-book.open {
+    display: flex !important;
+}
+
+.notes-header {
+    flex-shrink: 0;
+    background: #faf7ef;
+    padding: 16px;
+    border-bottom: 2px solid #d19a22;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.notes-header h3 {
+    margin: 0;
+    color: #967329;
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.notes-header .close-notes {
+    border: none !important;
+    background: transparent !important;
+    font-size: 28px !important;
+    cursor: pointer;
+    color: #80631d !important;
+    padding: 0 5px !important;
+    flex-shrink: 0;
+}
+
+.notes-content {
+    padding: 18px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.note-item {
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    color: #514c55;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+
+.no-notes {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+/* DRAWING CANVAS */
+#drawingCanvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 500;
+    pointer-events: none;
+}
+
+body.pen-mode {
+    cursor: crosshair;
+}
+
+body.pen-mode #drawingCanvas {
+    pointer-events: auto;
+    touch-action: none;
+}
+
+/* MAIN PAGE */
+.page {
+    max-width: 1100px;
+    margin: auto;
+    padding: 35px 55px 70px;
+}
+
+/* SFS LOGO */
+.logo {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw + 5px);
+    padding-left: 8px;
+    color: #e00000;
+    font-family: Arial, sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.logo::before {
+    display: none;
+}
+
+.logo::after {
+    content: "";
+    display: block;
+    width: calc(100% + 8px);
+    height: 4px;
+    margin-left: -8px;
+    margin-top: 10px;
+    background-color: #000;
+}
+
+/* PAGE TITLE */
+.title {
+    text-align: center;
+    color: #967329;
+    font-size: clamp(55px, 8vw, 105px);
+    line-height: 1;
+    margin: 20px 0 15px;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 28px;
+    font-style: italic;
+    color: #a59ba7;
+    max-width: 700px;
+    margin: auto;
+}
+
+.dates {
+    display: block;
+    width: fit-content;
+    margin: 45px auto;
+    padding: 10px 28px;
+    border: 3px solid #d39b21;
+    border-radius: 40px;
+    color: #967329;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.gold-line {
+    height: 4px;
+    background: #c79222;
+    border: none;
+    margin: 40px 0;
+}
+
+/* FACT BOX */
+.facts {
+    border: 2px solid #d9a52e;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 50px;
+    overflow: hidden;
+}
+
+.fact {
+    padding: 25px;
+    border-right: 1px solid #80687f;
+}
+
+.fact:last-child {
+    border-right: none;
+}
+
+.fact-title {
+    font-style: italic;
+    font-size: 18px;
+    color: #8b7c8c;
+}
+
+.fact-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #88808a;
+}
+
+/* INTRO */
+.intro {
+    font-size: 25px;
+    line-height: 1.65;
+    margin-bottom: 60px;
+}
+
+.drop-cap {
+    float: left;
+    font-size: 80px;
+    line-height: 65px;
+    padding-right: 8px;
+    color: #a6812d;
+}
+
+/* SECTIONS */
+section {
+    margin: 70px 0;
+}
+
+h2 {
+    color: #967329;
+    font-size: 42px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #d5a02a;
+    padding-bottom: 10px;
+}
+
+p {
+    font-size: 21px;
+    margin: 20px 0;
+}
+
+.wow {
+    text-decoration: underline dotted #d19a22 3px;
+    text-decoration-skip-ink: none;
+    font-weight: bold;
+}
+
+/* TIMELINE */
+.timeline {
+    border-left: 5px solid #d19a22;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    margin: 25px 0;
+    font-size: 21px;
+}
+
+.year {
+    color: #967329;
+    font-weight: bold;
+    font-size: 25px;
+    display: inline-block;
+    width: 90px;
+}
+
+/* WOW WORDS */
+.wow-box {
+    background: #faf7ef;
+    border: 3px solid #d19a22;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 60px;
+}
+
+.wow-box h2 {
+    border: none;
+    margin-top: 0;
+}
+
+.word {
+    margin: 18px 0;
+}
+
+.word strong {
+    color: #967329;
+    font-size: 23px;
+}
+
+.word span {
+    display: block;
+    font-size: 19px;
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+    .tools-main-button {
+        top: 10px;
+        right: 10px;
+    }
+
+    .tools-menu {
+        top: 53px;
+        right: 10px;
+        min-width: 180px;
+    }
+
+    .page {
+        padding: 25px 20px;
+    }
+
+    .logo {
+        margin-left: 0;
+        padding-left: 8px;
+        width: 100vw;
+        font-size: 64px;
+    }
+
+    .title {
+        font-size: 55px;
+    }
+
+    .subtitle {
+        font-size: 21px;
+    }
+
+    .facts {
+        grid-template-columns: 1fr;
+    }
+
+    .fact {
+        border-right: none;
+        border-bottom: 1px solid #80687f;
+    }
+
+    .fact:last-child {
+        border-bottom: none;
+    }
+
+    h2 {
+        font-size: 32px;
+    }
+
+    p,
+    .intro {
+        font-size: 18px;
+    }
+
+    .notes-book {
+        right: 10px;
+        top: 100px;
+        width: calc(100vw - 20px);
+        max-width: calc(100vw - 20px);
+        height: calc(100vh - 120px);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOOLS BUTTON -->
+<button id="toolsButton"
+        class="tools-main-button"
+        type="button"
+        aria-expanded="false">
+    Tools
+</button>
+
+<!-- TOOLS MENU -->
+<div class="tools-menu closed" id="toolsMenu">
+
+    <button id="highlightToggle" type="button">
+        🖍️ Highlighter: OFF
+    </button>
+
+    <div class="colour-picker" id="highlightColours">
+        <button class="colour-button selected" data-color="#ffe36e"
+            style="background:#ffe36e;" title="Yellow"
+            aria-label="Yellow highlighter"></button>
+
+        <button class="colour-button" data-color="#ff9ecb"
+            style="background:#ff9ecb;" title="Pink"
+            aria-label="Pink highlighter"></button>
+
+        <button class="colour-button" data-color="#8ec5ff"
+            style="background:#8ec5ff;" title="Blue"
+            aria-label="Blue highlighter"></button>
+
+        <button class="colour-button" data-color="#9be7a8"
+            style="background:#9be7a8;" title="Green"
+            aria-label="Green highlighter"></button>
+
+        <button class="colour-button" data-color="#ffb45c"
+            style="background:#ffb45c;" title="Orange"
+            aria-label="Orange highlighter"></button>
+    </div>
+
+    <button id="penToggle" type="button">
+        🖊️ Pen: OFF
+    </button>
+
+    <div class="colour-picker" id="penColours">
+        <button class="colour-button selected" data-color="#000000"
+            style="background:#000000;" title="Black"
+            aria-label="Black pen"></button>
+
+        <button class="colour-button" data-color="#e00000"
+            style="background:#e00000;" title="Red"
+            aria-label="Red pen"></button>
+
+        <button class="colour-button" data-color="#1769aa"
+            style="background:#1769aa;" title="Blue"
+            aria-label="Blue pen"></button>
+
+        <button class="colour-button" data-color="#198754"
+            style="background:#198754;" title="Green"
+            aria-label="Green pen"></button>
+
+        <button class="colour-button" data-color="#7b2cbf"
+            style="background:#7b2cbf;" title="Purple"
+            aria-label="Purple pen"></button>
+
+        <button class="colour-button" data-color="#f28c28"
+            style="background:#f28c28;" title="Orange"
+            aria-label="Orange pen"></button>
+
+        <button class="colour-button" data-color="#ff4fa3"
+            style="background:#ff4fa3;" title="Pink"
+            aria-label="Pink pen"></button>
+    </div>
+
+    <button id="notesButton" type="button"
+        aria-controls="notesBook" aria-expanded="false">
+        📚 Notes Book
+    </button>
+
+    <button id="clearHighlights" type="button">
+        🗑️ Clear Highlights
+    </button>
+
+    <button id="clearDrawing" type="button">
+        🧹 Clear Drawing
+    </button>
+</div>
+
+<!-- NOTES BOOK -->
+<div class="notes-book" id="notesBook" aria-hidden="true">
+    <div class="notes-header">
+        <h3>📚 My Highlighted Notes</h3>
+        <button class="close-notes" id="closeNotes" type="button"
+            aria-label="Close Notes Book">×</button>
+    </div>
+
+    <div class="notes-content" id="notesContent">
+        <div class="no-notes">
+            You haven't highlighted anything yet.
+        </div>
+    </div>
+</div>
+
+<canvas id="drawingCanvas"></canvas>
+
+<!-- MAIN PAGE -->
+<div class="page">
+
+    <div class="logo">sfs</div>
+
+    <h1 class="title">Queen Victoria</h1>
+
+    <div class="subtitle">
+        The lonely girl who became the ruler of an empire
+    </div>
+
+    <div class="dates">1819 to 1901</div>
+
+    <hr class="gold-line">
+
+    <div class="facts">
+        <div class="fact">
+            <div class="fact-title">Born</div>
+            <div class="fact-value">
+                24 May 1819,<br>
+                Kensington Palace,<br>
+                London
+            </div>
+        </div>
+
+        <div class="fact">
+            <div class="fact-title">Reigned for</div>
+            <div class="fact-value">63 years and 7 months</div>
+        </div>
+
+        <div class="fact">
+            <div class="fact-title">Husband</div>
+            <div class="fact-value">Prince Albert</div>
+            <br>
+            <div class="fact-title">Children</div>
+            <div class="fact-value">Nine</div>
+        </div>
+    </div>
+
+    <div class="intro">
+        <span class="drop-cap">I</span>magine waking up one morning as an ordinary eighteen-year-old
+        and being told that you are now the queen of the whole country.
+
+        That is exactly what happened to Queen Victoria.
+
+        She went on to <span class="wow">reign</span> for more than
+        sixty-three years, which was longer than any British
+        <span class="wow">monarch</span> before her.
+
+        Her time on the throne was so <span class="wow">remarkable</span>
+        that we still call it the Victorian era today.
+
+        In this page, I am going to tell you all about her extraordinary
+        life, from her lonely childhood to her magnificent funeral.
+    </div>
+
+    <section>
+        <h2>A Lonely Childhood</h2>
+        <p>
+            Victoria was born on <span class="wow">24 May 1819</span>
+            at Kensington Palace in London.
+            Her father, Prince Edward, Duke of Kent, died when Victoria
+            was less than a year old.
+        </p>
+        <p>
+            Victoria was raised mainly by her mother, the Duchess of Kent.
+            Her childhood was very controlled and she was rarely allowed
+            to be alone.
+        </p>
+        <p>
+            Victoria's childhood was unusual because everyone knew that
+            she might one day become queen. She was taught history,
+            languages, music, drawing and other subjects that would
+            prepare her for her future role.
+        </p>
+    </section>
+
+    <section>
+        <h2>Becoming Queen</h2>
+        <p>
+            Victoria's uncle, King William IV, died on
+            <span class="wow">20 June 1837</span>.
+            Victoria was only eighteen years old.
+        </p>
+        <p>
+            She became <span class="wow">Queen of the United Kingdom</span>
+            and began one of the longest reigns in British history.
+        </p>
+        <p>
+            Her coronation took place on <span class="wow">28 June 1838</span>
+            at Westminster Abbey.
+        </p>
+        <p>
+            Victoria quickly became a powerful symbol of Britain's
+            changing nineteenth-century society.
+        </p>
+    </section>
+
+    <section>
+        <h2>Prince Albert</h2>
+        <p>
+            Victoria married her cousin,
+            <span class="wow">Prince Albert of Saxe-Coburg and Gotha</span>,
+            in 1840.
+        </p>
+        <p>
+            They eventually had <span class="wow">nine children</span>.
+            Their children married into several European royal families,
+            helping create a large network of royal relatives.
+        </p>
+        <p>
+            Albert became an important adviser to Victoria.
+            He was interested in science, technology, education and the arts.
+        </p>
+    </section>
+
+    <section>
+        <h2>Britain Changes</h2>
+        <p>
+            During Victoria's reign, Britain changed dramatically.
+            The <span class="wow">Industrial Revolution</span>
+            transformed the country.
+        </p>
+        <p>
+            Factories became more important, cities grew rapidly and
+            new machines changed the way people worked and travelled.
+        </p>
+        <p>
+            Britain's railway network expanded enormously.
+            Steam trains made it much easier for people and goods
+            to travel across the country.
+        </p>
+        <p>
+            New inventions and discoveries also changed everyday life.
+        </p>
+    </section>
+
+    <section>
+        <h2>The Great Exhibition</h2>
+        <p>
+            One of the most famous events of Victoria's reign was the
+            <span class="wow">Great Exhibition of 1851</span>.
+        </p>
+        <p>
+            It was held inside the enormous
+            <span class="wow">Crystal Palace</span>
+            in London's Hyde Park.
+        </p>
+        <p>
+            The exhibition showed inventions, machinery, artwork and
+            products from Britain and countries around the world.
+        </p>
+        <p>
+            Prince Albert played an important role in organising
+            the exhibition.
+        </p>
+    </section>
+
+    <section>
+        <h2>The British Empire</h2>
+        <p>
+            During Victoria's reign, the British Empire expanded and
+            changed. Britain controlled territories in many parts
+            of the world.
+        </p>
+        <p>
+            In <span class="wow">1876</span>, Victoria was given the title
+            <span class="wow">Empress of India</span>.
+        </p>
+        <p>
+            The empire brought Britain enormous power, but imperial rule
+            also involved conflict, inequality and the loss of control
+            by people in territories ruled by Britain.
+        </p>
+        <p>
+            Understanding the Victorian period therefore means studying
+            both Britain's achievements and the difficult consequences
+            of empire.
+        </p>
+    </section>
+
+    <section>
+        <h2>A Devastating Loss</h2>
+        <p>
+            In <span class="wow">1861</span>, Prince Albert became
+            seriously ill and died at Windsor Castle.
+        </p>
+        <p>
+            Victoria was devastated by his death. She spent many years
+            mourning him and wore black clothing for much of the rest
+            of her life.
+        </p>
+        <p>
+            Although she withdrew from some public life for a period,
+            she eventually returned to many of her royal duties.
+        </p>
+    </section>
+
+    <section>
+        <h2>The Victorian Era</h2>
+        <p>
+            Victoria's name became connected with an entire era.
+            The <span class="wow">Victorian era</span> lasted from
+            her accession in 1837 until her death in 1901.
+        </p>
+        <p>
+            Victorian Britain saw major developments in science,
+            engineering, literature, education and transport.
+        </p>
+        <p>
+            Famous writers such as Charles Dickens, George Eliot and
+            Thomas Hardy produced important works during the period.
+        </p>
+    </section>
+
+    <section>
+        <h2>Victoria's Jubilees</h2>
+        <p>
+            Victoria's long reign meant that she celebrated several
+            major anniversaries of becoming queen.
+        </p>
+        <p>
+            Her <span class="wow">Golden Jubilee</span> took place in
+            1887, marking fifty years on the throne.
+        </p>
+        <p>
+            Her <span class="wow">Diamond Jubilee</span> took place in
+            1897, marking sixty years as queen.
+        </p>
+        <p>
+            These celebrations showed how famous and important Victoria
+            had become to many people in Britain and across the empire.
+        </p>
+    </section>
+
+    <section>
+        <h2>The End of an Era</h2>
+        <p>
+            Queen Victoria died on <span class="wow">22 January 1901</span>
+            at Osborne House on the Isle of Wight.
+        </p>
+        <p>
+            She had been queen for
+            <span class="wow">63 years and 7 months</span>.
+        </p>
+        <p>
+            Her death marked the end of the Victorian era.
+            Her son Edward became King Edward VII.
+        </p>
+        <p>
+            Victoria's funeral was a huge national event watched by
+            enormous crowds.
+        </p>
+    </section>
+
+    <section>
+        <h2>Victoria's Legacy</h2>
+        <p>
+            Queen Victoria remains one of the most famous monarchs
+            in British history.
+        </p>
+        <p>
+            Her reign saw enormous changes in technology, transport,
+            science, industry and society.
+        </p>
+        <p>
+            The period also had serious problems, including poverty,
+            inequality and the effects of Britain's expanding empire.
+        </p>
+        <p>
+            That is why studying Victoria is useful: it helps us
+            understand both the <span class="wow">achievements</span>
+            and the <span class="wow">problems</span> of
+            nineteenth-century Britain.
+        </p>
+    </section>
+
+    <section>
+        <h2>Queen Victoria Timeline</h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <span class="year">1819</span>
+                Victoria is born at Kensington Palace.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1837</span>
+                Victoria becomes Queen of the United Kingdom.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1838</span>
+                Victoria is crowned at Westminster Abbey.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1840</span>
+                Victoria marries Prince Albert.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1851</span>
+                The Great Exhibition opens in London.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1861</span>
+                Prince Albert dies.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1876</span>
+                Victoria becomes Empress of India.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1887</span>
+                Victoria celebrates her Golden Jubilee.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1897</span>
+                Victoria celebrates her Diamond Jubilee.
+            </div>
+            <div class="timeline-item">
+                <span class="year">1901</span>
+                Queen Victoria dies at Osborne House.
+            </div>
+        </div>
+    </section>
+
+    <div class="wow-box">
+        <h2>🧠 Wow Words</h2>
+
+        <div class="word">
+            <strong>Monarch</strong>
+            <span>A king or queen who rules a country.</span>
+        </div>
+
+        <div class="word">
+            <strong>Reign</strong>
+            <span>The period during which a monarch rules.</span>
+        </div>
+
+        <div class="word">
+            <strong>Empire</strong>
+            <span>A group of territories or countries controlled by one power.</span>
+        </div>
+
+        <div class="word">
+            <strong>Industrial Revolution</strong>
+            <span>A period of major industrial and technological change.</span>
+        </div>
+
+        <div class="word">
+            <strong>Jubilee</strong>
+            <span>A celebration of an important anniversary.</span>
+        </div>
+
+        <div class="word">
+            <strong>Coronation</strong>
+            <span>The ceremony in which a monarch is formally crowned.</span>
+        </div>
+
+        <div class="word">
+            <strong>Victorian</strong>
+            <span>Relating to the period when Queen Victoria was monarch.</span>
+        </div>
+
+        <div class="word">
+            <strong>Exhibition</strong>
+            <span>A public event where objects, inventions or ideas are displayed.</span>
+        </div>
+
+        <div class="word">
+            <strong>Legacy</strong>
+            <span>The lasting impact or influence left behind by someone.</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const toolsButton = document.getElementById("toolsButton");
+const toolsMenu = document.getElementById("toolsMenu");
+const highlightToggle = document.getElementById("highlightToggle");
+const penToggle = document.getElementById("penToggle");
+const highlightColours = document.getElementById("highlightColours");
+const penColours = document.getElementById("penColours");
+const notesButton = document.getElementById("notesButton");
+const notesBook = document.getElementById("notesBook");
+const closeNotes = document.getElementById("closeNotes");
+const notesContent = document.getElementById("notesContent");
+const clearHighlights = document.getElementById("clearHighlights");
+const clearDrawing = document.getElementById("clearDrawing");
+
+const HIGHLIGHT_STORAGE = "sfs_queen_victoria_highlights";
+const DRAWING_STORAGE = "sfs_queen_victoria_drawing";
+
+/* TOOLS MENU */
+toolsButton.addEventListener("click", () => {
+    const isOpen = toolsMenu.classList.contains("open");
+
+    toolsMenu.classList.toggle("open", !isOpen);
+    toolsMenu.classList.toggle("closed", isOpen);
+    toolsButton.classList.toggle("active", !isOpen);
+    toolsButton.setAttribute("aria-expanded", String(!isOpen));
+});
+
+/* HIGHLIGHTER */
+let highlightMode = false;
+let highlightColor =
+    localStorage.getItem("sfs_queen_victoria_highlight_color") || "#ffe36e";
+
+highlightToggle.addEventListener("click", () => {
+    highlightMode = !highlightMode;
+    highlightToggle.textContent =
+        highlightMode ? "🖍️ Highlighter: ON" : "🖍️ Highlighter: OFF";
+    highlightToggle.classList.toggle("active", highlightMode);
+    highlightColours.classList.toggle("show", highlightMode);
+    document.body.classList.toggle("highlight-mode", highlightMode);
+});
+
+/* HIGHLIGHT COLOURS */
+document.querySelectorAll("#highlightColours .colour-button")
+.forEach(button => {
+    if (button.dataset.color === highlightColor) {
+        document.querySelectorAll("#highlightColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+        button.classList.add("selected");
+    }
+
+    button.addEventListener("click", () => {
+        highlightColor = button.dataset.color;
+
+        localStorage.setItem(
+            "sfs_queen_victoria_highlight_color",
+            highlightColor
+        );
+
+        document.querySelectorAll("#highlightColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+
+        button.classList.add("selected");
+    });
+});
+
+/* PEN */
+let penMode = false;
+let penColor =
+    localStorage.getItem("sfs_queen_victoria_pen_color") || "#000000";
+
+penToggle.addEventListener("click", () => {
+    penMode = !penMode;
+    penToggle.textContent = penMode ? "🖊️ Pen: ON" : "🖊️ Pen: OFF";
+    penToggle.classList.toggle("active", penMode);
+    penColours.classList.toggle("show", penMode);
+    document.body.classList.toggle("pen-mode", penMode);
+});
+
+/* PEN COLOURS */
+document.querySelectorAll("#penColours .colour-button")
+.forEach(button => {
+    if (button.dataset.color === penColor) {
+        document.querySelectorAll("#penColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+        button.classList.add("selected");
+    }
+
+    button.addEventListener("click", () => {
+        penColor = button.dataset.color;
+
+        localStorage.setItem(
+            "sfs_queen_victoria_pen_color",
+            penColor
+        );
+
+        document.querySelectorAll("#penColours .colour-button")
+            .forEach(btn => btn.classList.remove("selected"));
+
+        button.classList.add("selected");
+    });
+});
+
+/* HIGHLIGHT TEXT */
+document.addEventListener("mouseup", () => {
+    if (!highlightMode) return;
+
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed) return;
+
+    const selectedText = selection.toString().trim();
+    if (!selectedText) return;
+
+    const range = selection.getRangeAt(0);
+    const mark = document.createElement("mark");
+
+    mark.className = "user-highlight";
+    mark.style.backgroundColor = highlightColor;
+
+    try {
+        range.surroundContents(mark);
+        saveHighlights();
+        updateNotes();
+        selection.removeAllRanges();
+    } catch (error) {
+        console.log("Please highlight text within one paragraph or section.");
+    }
+});
+
+/* SAVE HIGHLIGHTS */
+function saveHighlights() {
+    const highlights = Array.from(
+        document.querySelectorAll("mark.user-highlight")
+    ).map(mark => ({
+        text: mark.textContent,
+        color: mark.style.backgroundColor
+    }));
+
+    localStorage.setItem(HIGHLIGHT_STORAGE, JSON.stringify(highlights));
+}
+
+/* RESTORE HIGHLIGHTS */
+function restoreHighlights() {
+    let saved;
+
+    try {
+        saved = JSON.parse(localStorage.getItem(HIGHLIGHT_STORAGE) || "[]");
+    } catch {
+        saved = [];
+    }
+
+    if (!Array.isArray(saved) || saved.length === 0) return;
+
+    const walker = document.createTreeWalker(
+        document.querySelector(".page"),
+        NodeFilter.SHOW_TEXT
+    );
+
+    const textNodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) {
+        if (node.parentElement.closest("mark.user-highlight")) continue;
+        textNodes.push(node);
+    }
+
+    saved.forEach(item => {
+        if (!item.text) return;
+
+        for (const textNode of textNodes) {
+            const text = textNode.nodeValue;
+            const index = text.indexOf(item.text);
+
+            if (index === -1) continue;
+
+            const range = document.createRange();
+            range.setStart(textNode, index);
+            range.setEnd(textNode, index + item.text.length);
+
+            const mark = document.createElement("mark");
+            mark.className = "user-highlight";
+            mark.style.backgroundColor = item.color || "#ffe36e";
+
+            try {
+                range.surroundContents(mark);
+                textNodes.splice(textNodes.indexOf(textNode), 1);
+            } catch (error) {
+                // Skip text that cannot be restored safely.
+            }
+
+            break;
+        }
+    });
+}
+
+/* NOTES BOOK */
+function updateNotes() {
+    const highlights = document.querySelectorAll("mark.user-highlight");
+    notesContent.innerHTML = "";
+
+    if (highlights.length === 0) {
+        notesContent.innerHTML =
+            '<div class="no-notes">You haven\'t highlighted anything yet.</div>';
+        return;
+    }
+
+    highlights.forEach(mark => {
+        const note = document.createElement("div");
+        note.className = "note-item";
+        note.style.backgroundColor = mark.style.backgroundColor;
+        note.textContent = mark.textContent;
+        notesContent.appendChild(note);
+    });
+}
+
+notesButton.addEventListener("click", () => {
+    const isOpen = notesBook.classList.contains("open");
+
+    if (isOpen) {
+        notesBook.classList.remove("open");
+        notesBook.setAttribute("aria-hidden", "true");
+        notesButton.setAttribute("aria-expanded", "false");
+    } else {
+        updateNotes();
+        notesBook.classList.add("open");
+        notesBook.setAttribute("aria-hidden", "false");
+        notesButton.setAttribute("aria-expanded", "true");
+    }
+});
+
+closeNotes.addEventListener("click", () => {
+    notesBook.classList.remove("open");
+    notesBook.setAttribute("aria-hidden", "true");
+    notesButton.setAttribute("aria-expanded", "false");
+});
+
+/* CLEAR HIGHLIGHTS */
+clearHighlights.addEventListener("click", () => {
+    document.querySelectorAll("mark.user-highlight").forEach(mark => {
+        const parent = mark.parentNode;
+
+        while (mark.firstChild) {
+            parent.insertBefore(mark.firstChild, mark);
+        }
+
+        parent.removeChild(mark);
+    });
+
+    localStorage.removeItem(HIGHLIGHT_STORAGE);
+    updateNotes();
+});
+
+/* DRAWING CANVAS */
+const canvas = document.getElementById("drawingCanvas");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+
+function resizeCanvas() {
+    const oldCanvas = document.createElement("canvas");
+    oldCanvas.width = canvas.width;
+    oldCanvas.height = canvas.height;
+
+    if (canvas.width > 0 && canvas.height > 0) {
+        oldCanvas.getContext("2d").drawImage(canvas, 0, 0);
+    }
+
+    canvas.width = document.documentElement.scrollWidth;
+    canvas.height = document.documentElement.scrollHeight;
+
+    if (oldCanvas.width > 0 && oldCanvas.height > 0) {
+        ctx.drawImage(oldCanvas, 0, 0);
+    }
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+/* DRAWING */
+canvas.addEventListener("pointerdown", event => {
+    if (!penMode) return;
+
+    drawing = true;
+    canvas.setPointerCapture(event.pointerId);
+
+    const rect = canvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(event.clientX - rect.left, event.clientY - rect.top);
+});
+
+canvas.addEventListener("pointermove", event => {
+    if (!drawing || !penMode) return;
+
+    const rect = canvas.getBoundingClientRect();
+
+    ctx.strokeStyle = penColor;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+    ctx.stroke();
+});
+
+function stopDrawing() {
+    if (!drawing) return;
+    drawing = false;
+    saveDrawing();
+}
+
+canvas.addEventListener("pointerup", stopDrawing);
+canvas.addEventListener("pointercancel", stopDrawing);
+
+/* SAVE DRAWING */
+function saveDrawing() {
+    try {
+        localStorage.setItem(DRAWING_STORAGE, canvas.toDataURL());
+    } catch (error) {
+        console.log("Drawing could not be saved.");
+    }
+}
+
+/* RESTORE DRAWING */
+function loadDrawing() {
+    const saved = localStorage.getItem(DRAWING_STORAGE);
+    if (!saved) return;
+
+    const image = new Image();
+
+    image.onload = () => {
+        ctx.drawImage(image, 0, 0);
+    };
+
+    image.src = saved;
+}
+
+/* CLEAR DRAWING */
+clearDrawing.addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem(DRAWING_STORAGE);
+});
+
+/* CLOSE TOOLS WHEN CLICKING OUTSIDE */
+document.addEventListener("click", event => {
+    if (!toolsMenu.contains(event.target) && event.target !== toolsButton) {
+        toolsMenu.classList.remove("open");
+        toolsMenu.classList.add("closed");
+        toolsButton.classList.remove("active");
+        toolsButton.setAttribute("aria-expanded", "false");
+    }
+});
+
+/* STARTUP */
+restoreHighlights();
+updateNotes();
+loadDrawing();
+</script>
+<h6>made by chatgpt</h6>
+</body>
+</html>
